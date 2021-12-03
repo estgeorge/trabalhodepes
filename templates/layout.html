@@ -23,7 +23,8 @@
 
 <body id="page-top">
     <!-- Navigation-->
-    <nav class="navbar navbar-expand-lg navbar-light fixed-top shadow-sm" id="mainNav">
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top shadow-sm" id="mainNav"
+        style="background-color:lightskyblue">
         <div class="container px-5">
             <a class="navbar-brand fw-bold" href="/">iMedicine</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive"
@@ -34,24 +35,30 @@
             <div class="collapse navbar-collapse" id="navbarResponsive">
                 <ul class="navbar-nav ms-auto me-4 my-3 my-lg-0">
                     <li class="nav-item"><a class="nav-link me-lg-3" href="produtos">Produtos</a></li>
-                    <li class="nav-item"><a class="nav-link me-lg-3" href="addusuario">Cadastro Usuário</a></li>
-                    <li class="nav-item"><a class="nav-link me-lg-3" href="addfarma">Cadastro Farmácia</a></li>
-                    <li class="nav-item"><a class="nav-link me-lg-3" href="#">Área do farmacêutico</a></li>
+                    <li class="nav-item"><a class="nav-link me-lg-3" href="addusuario">Cadastrar usuário</a></li>
+                    <li class="nav-item"><a class="nav-link me-lg-3" href="addfarma">Cadastrar farmácia</a></li>
+                    <li class="nav-item"><a class="nav-link me-lg-3" href="#">Área da farmácia</a></li>
                 </ul>
+
+                {% if logged_out() %}
                 <a class="btn btn-primary rounded-pill px-3 mb-2 mb-lg-0" style="margin-right: 10px;" href="login">
                     <span class="d-flex align-items-center">
                         <span class="small">Entrar</span>
                     </span>
                 </a>
+                {% else %}
+                <a class="btn btn-primary rounded-pill px-3 mb-2 mb-lg-0" style="margin-right: 10px;" href="logout">
+                    <span class="d-flex align-items-center">
+                        <span class="small">Sair</span>
+                    </span>
+                </a>
+                {% endif %}
+
             </div>
         </div>
     </nav>
 
-
-
     {% block content %}{% endblock %}
-
-
 
     <!-- Footer-->
     <footer class="bg-black text-center py-5">

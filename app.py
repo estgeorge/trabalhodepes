@@ -9,6 +9,7 @@ app.secret_key = b'\xf85~.("^\xee\r\xf20OF\xbaC\xff'
 def logged_out():
     return 'email' not in session
 
+app.jinja_env.globals.update(logged_out=logged_out) 
 
 def get_db_connection():
     conn = sqlite3.connect('database.db')
@@ -25,9 +26,7 @@ def home():
 def produtos():
     if logged_out():
         return redirect(url_for('login'))
-    email = session['email']
-    return 'Logged in as ' + email + '<br>' + \
-        "<b><a href = '/logout'>click here to log out</a></b>"
+    return render_template('produtos.html')
 
 
 @app.route('/addusuario', methods=['GET', 'POST'])
