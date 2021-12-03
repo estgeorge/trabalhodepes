@@ -1,0 +1,52 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<section class="bg-light">
+    <div class="container px-5 mt-3">
+
+        {% for message in get_flashed_messages() %}
+        <div class="alert alert-danger" role="alert">{{ message }}</div>
+        {% endfor %}
+
+        <div class="row justify-content-center">
+            <div class="col-md-8 p-2">
+                <h2 class="mb-4">Cadastro do Cliente</h2>
+
+                <form method="post">
+
+                    <div class="mb-4 form-floating">
+                        <input type="text" name="nome" class="form-control" placeholder="Nome" />
+                        <label class="form-label">Nome</label>
+                    </div>
+
+                    <div class="mb-4 form-floating">
+                        <input type="text" name="endereco" class="form-control" placeholder="Endereço" />
+                        <label class="form-label">Endereço</label>
+                    </div>
+
+                    <div class="mb-4 form-floating">
+                        <input type="text" name="celular" class="form-control" placeholder="Celular" />
+                        <label class="form-label">Celular</label>
+                    </div>
+
+                    <div class="mb-4 form-floating">
+                        <input type="email" name="email" class="form-control" placeholder="Email" />
+                        <label class="form-label">Email</label>
+                    </div>
+
+                    <div class="mb-4 form-floating">
+                        <input type="password" name="senha" class="form-control" placeholder="Senha" />
+                        <label class="form-label">Senha</label>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-block mb-4 mt-4">Enviar</button>
+                </form>
+
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+{% endblock %}

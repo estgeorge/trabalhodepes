@@ -33,24 +33,25 @@
 <body class="text-center">
 
   <main class="form-signin">
-    <form action="" method="post">
+    <form method="post">
       <p><b>iMedicine</b></p>
       <h1 class="h3 mb-3 fw-normal">Login</h1>
 
       <div class="form-floating">
-        <input type="text" class="form-control" id="floatingInput" name="username" placeholder="usuário" value="{{
-          request.form.username }}">
-        <label for="floatingInput">Usuário</label>
+        <input type="email" class="form-control" id="floatingInput" name="email" placeholder="email" value="{{
+          request.form.email }}">
+        <label for="floatingInput">Email</label>
       </div>
       <div class="form-floating">
-        <input type="password" class="form-control" id="floatingPassword" name="password" placeholder="senha" value="{{
-          request.form.password }}">
+        <input type="password" class="form-control" id="floatingPassword" name="senha" placeholder="senha" value="{{
+          request.form.senha }}">
         <label for="floatingPassword">Senha</label>
       </div>
-
+      <!--
       <div>
-        <p>Ainda não tem conta? <a href="#">Cadastre-se</a></p>
+        <p>Ainda não tem conta? <a href="addcliente">Cadastre-se</a></p>
       </div>
+      -->
       <button class="w-100 btn btn-lg btn-primary" type="submit" value="Login">Logar</button>
       {% if error %}
       <div class="error">{{ error }}</div>
