@@ -1,6 +1,7 @@
 import sqlite3
 from flask import Flask, render_template, redirect, url_for, flash, request, session
 from werkzeug.exceptions import abort
+from utils import *
 
 app = Flask(__name__)
 app.secret_key = b'\xf85~.("^\xee\r\xf20OF\xbaC\xff'
@@ -9,7 +10,10 @@ app.secret_key = b'\xf85~.("^\xee\r\xf20OF\xbaC\xff'
 def logged_out():
     return 'email' not in session
 
-app.jinja_env.globals.update(logged_out=logged_out) 
+
+app.jinja_env.globals.update(logged_out=logged_out)
+app.jinja_env.globals.update(number2real=number2real)
+
 
 def get_db_connection():
     conn = sqlite3.connect('database.db')
@@ -26,7 +30,38 @@ def home():
 def produtos():
     if logged_out():
         return redirect(url_for('login'))
-    return render_template('produtos.html')
+
+    produtos = None
+    resultado = ""
+    if request.args.get('query', None):
+        query = request.args['query']
+        conn = get_db_connection()
+        sql = "SELECT e.*, f.nome AS farmacia FROM estoque AS e INNER JOIN farmacia AS f ON e.farmacia_id = f.id WHERE produto LIKE '%"+query+"%'"
+        produtos = conn.execute(sql).fetchall()
+        if not produtos:
+            resultado = "Nenhum produto encontrado!"
+        conn.close()
+
+    return render_template('produtos.html', produtos=produtos, resultado=resultado)
+
+
+def get_produto(produto_id):
+    conn = get_db_connection()
+    sql = f'SELECT * FROM estoque WHERE id = {produto_id}'
+    produto = conn.execute(sql).fetchone()
+    conn.close()
+    if produto is None:
+        abort(404)
+    return produto
+
+
+@app.route('/produto/<int:produto_id>')
+def produto(produto_id):
+    if logged_out():
+        return redirect(url_for('login'))
+
+    produto = get_produto(produto_id)
+    return render_template('produto.html', produto=produto)
 
 
 @app.route('/addusuario', methods=['GET', 'POST'])

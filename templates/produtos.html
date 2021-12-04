@@ -9,19 +9,39 @@
         {% endfor %}
 
         <div class="row justify-content-center">
-            <div class="col-md-8">
+            <div class="col-md-10">
                 <h2 class="mb-4 mt-4">Produtos</h2>
 
                 <div class="container p-0">
-                    <form class="row">
+                    <form class="row" method="get">
                         <div class="col-md-8">
-                            <input type="text" name="pesquisa" class="form-control" placeholder="Pesquisar" />
+                            <input type="text" name="query" class="form-control" placeholder="Busque aqui seu produto"
+                                value="{{request.args['query']}}"" />
                         </div>
-                        <div class="col-auto">
+                        <div class=" col-auto">
                             <button type="submit" class="btn btn-primary btn-block">Enviar</button>
                         </div>
                     </form>
                 </div>
+
+                <p class="mt-3">{{ resultado }}</p>
+
+                <table class="table mt-5">
+
+                    {% if produtos %}
+                    {% for produto in produtos %}
+                    <tr>
+                        <td>
+                            <a href="produto/{{ produto['id'] }}">{{ produto['produto'] }}</a><br />
+                            <small>{{ produto['farmacia'] }}</small>
+                        </td>
+                        <td>
+                            <b> R$ {{ number2real(produto['preco']) }} </b>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    {% endif %}
+                </table>
 
             </div>
 

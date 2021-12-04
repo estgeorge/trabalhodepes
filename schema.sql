@@ -18,4 +18,16 @@ CREATE TABLE farmacia (
     cnpj TEXT NOT NULL,
     email TEXT NOT NULL,
     senha TEXT NOT NULL
+); 
+
+
+DROP TABLE IF EXISTS estoque;
+
+CREATE TABLE estoque (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,    
+    produto TEXT NOT NULL,
+    preco REAL NOT NULL,    
+    qtd	 INTEGER NOT NULL,
+    farmacia_id INTEGER NOT NULL
 );
+

@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<header class="masthead">
+    <div class="container px-5">
+        <div class="row gx-5 align-items-center">
+            <div class="col-lg-6">
+                <div class="mb-5 mb-lg-0 text-center text-lg-start">
+                    <h1 class="display-1 lh-1 mb-3" style="color:aliceblue;">{{ produto['produto'] }}</h1>
+                    <p class="lead fw-normal mb-5" style="color:aliceblue;"></p>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="masthead-device-mockup">
+                    <img class="img-fluid" src="static/img/produtos.png">
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+{% endblock %}
