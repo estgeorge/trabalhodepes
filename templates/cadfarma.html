@@ -15,22 +15,26 @@
                 <form method="post">
 
                     <div class="mb-4 form-floating">
-                        <input type="text" name="nome" class="form-control" placeholder="Nome" />
+                        <input type="text" name="nome" class="form-control" placeholder="Nome" value="{{
+                            request.form.nome }}" />
                         <label class="form-label">Nome</label>
                     </div>
 
                     <div class="mb-4 form-floating">
-                        <input type="text" name="endereco" class="form-control" placeholder="Endereço" />
+                        <input type="text" name="endereco" class="form-control" placeholder="Endereço" value="{{
+                            request.form.endereco }}" />
                         <label class="form-label">Endereço</label>
                     </div>
 
                     <div class="mb-4 form-floating">
-                        <input type="text" name="CNPJ" class="form-control" placeholder="CNPJ" />
+                        <input type="text" name="cnpj" class="form-control" placeholder="CNPJ" value="{{
+                            request.form.cnpj }}" />
                         <label class="form-label">CNPJ</label>
                     </div>
 
                     <div class="mb-4 form-floating">
-                        <input type="email" name="email" class="form-control" placeholder="Email" />
+                        <input type="email" name="email" class="form-control" placeholder="Email" value="{{
+                            request.form.email }}" />
                         <label class="form-label">Email</label>
                     </div>
 

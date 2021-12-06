@@ -3,11 +3,7 @@
 
 <section class="bg-light">
     <div class="container px-5 mt-3">
-
-        {% for message in get_flashed_messages() %}
-        <div class="alert alert-danger" role="alert">{{ message }}</div>
-        {% endfor %}
-
+        {{ flashed_messages() }}
         <div class="row justify-content-center">
             <div class="col-md-8 p-2">
                 <h2 class="mb-4">Cadastro do Usuário</h2>
@@ -15,22 +11,26 @@
                 <form method="post">
 
                     <div class="mb-4 form-floating">
-                        <input type="text" name="nome" class="form-control" placeholder="Nome" />
+                        <input type="text" name="nome" class="form-control" placeholder="Nome" value="{{
+                            request.form.nome }}" />
                         <label class="form-label">Nome</label>
                     </div>
 
                     <div class="mb-4 form-floating">
-                        <input type="text" name="endereco" class="form-control" placeholder="Endereço" />
+                        <input type="text" name="endereco" class="form-control" placeholder="Endereço" value="{{
+                            request.form.endereco }}" />
                         <label class="form-label">Endereço</label>
                     </div>
 
                     <div class="mb-4 form-floating">
-                        <input type="text" name="celular" class="form-control" placeholder="Celular" />
+                        <input type="text" name="celular" class="form-control" placeholder="Celular" value="{{
+                            request.form.celular }}" />
                         <label class="form-label">Celular</label>
                     </div>
 
                     <div class="mb-4 form-floating">
-                        <input type="email" name="email" class="form-control" placeholder="Email" />
+                        <input type="email" name="email" class="form-control" placeholder="Email" value="{{
+                            request.form.email }}" />
                         <label class="form-label">Email</label>
                     </div>
 

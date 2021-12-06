@@ -1,22 +1,24 @@
 {% extends "layout.html" %}
 {% block content %}
 
-<header class="masthead">
+<section class="bg-light">
     <div class="container px-5">
-        <div class="row gx-5 align-items-center">
-            <div class="col-lg-6">
-                <div class="mb-5 mb-lg-0 text-center text-lg-start">
-                    <h1 class="display-1 lh-1 mb-3" style="color:aliceblue;">{{ produto['produto'] }}</h1>
-                    <p class="lead fw-normal mb-5" style="color:aliceblue;"></p>
+        <div class="row gx-5 mb-5 p-5">
+            <div class="col-md-6">
+                <div class="mb-5">
+                    <h1 class="mt-5">{{ produto['produto'] }}</h1>
                 </div>
             </div>
-            <div class="col-lg-6">
-                <div class="masthead-device-mockup">
-                    <img class="img-fluid" src="static/img/produtos.png">
-                </div>
+            <div class="col-md-6">
+                <form action="/carrinho" method="post" name="produto">
+                    <h1 class="mt-5">R$ {{ number2real(produto['preco']) }}</h1>
+                    <input type="hidden" name="produto_id" value="{{ produto['id'] }}">
+                    <input type="hidden" name="task" value="add">
+                    <button type="submit" class="btn btn-primary btn-block mb-4 mt-4 me-3">Comprar</button>
+                </form>
             </div>
         </div>
     </div>
-</header>
+</section>
 
 {% endblock %}

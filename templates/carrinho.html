@@ -1,0 +1,58 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<script>
+    function altera(pedido_id) {
+        form = document.carrinho;
+        form.pedido_id.value = pedido_id;
+        form.submit();
+    }
+</script>
+
+<section class="bg-light">
+    <div class="container px-5 mt-3">
+        {{ flashed_messages() }}
+        <div class="row justify-content-center">
+            <div class="col-md-10 p-2">
+                <h2 class="mb-4">Carrinho de compras</h2>
+
+                <form action="/carrinho" method="post" name="carrinho">
+                    <table class="table">
+                        <thead>
+                            <td>Produto</td>
+                            <td>Num. de itens</td>
+                            <td>Preço unitário</td>
+                            <td>Valor</td>
+                            <td></td>
+                        </thead>
+
+                        {% for pedido in pedidos %}
+                        <tr>
+                            <td>{{ pedido['produto'] }}</td>
+                            <td>
+                                <input type="number" name="nitens{{pedido['pedido_id']}}" class="form-control"
+                                    placeholder="" value="{{ pedido['nitens'] }}" style="width: 80px;" />
+                            </td>
+                            <td>R$&nbsp;{{ number2real(pedido['preco']) }}</td>
+                            <td>R$&nbsp;{{ number2real(pedido['total']) }}</td>
+                            <td><button type="submit" onclick="altera('{{ pedido['pedido_id'] }}')"
+                                    class="btn btn-primary btn-block">Alterar</button></td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                    <input type="hidden" name="pedido_id" value="">
+                    <input type="hidden" name="task" value="mod">
+                </form>
+
+                <div class="d-flex justify-content-end">
+                    <h2 class="">Total R$&nbsp;{{ number2real(total_geral) }}</h2>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+    </div>
+</section>
+
+{% endblock %}
