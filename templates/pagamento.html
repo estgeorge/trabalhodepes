@@ -1,0 +1,92 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<section>
+    <div class="container mt-3" style="padding-bottom: 200px;" ;>
+
+        {% for message in get_flashed_messages() %}
+        <div class="alert alert-danger" role="alert">{{ message }}</div>
+        {% endfor %}
+
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                <h2 class="mb-4 mt-4">Forma de Pagamento</h2>
+
+
+                <div class="d-flex align-items-start">
+                    <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist"
+                        aria-orientation="vertical">
+                        <button class="nav-link active" id="v-pills-pix-tab" data-bs-toggle="pill"
+                            data-bs-target="#v-pills-pix" type="button" role="tab" aria-controls="v-pills-pix"
+                            aria-selected="true" style="width: 200px;">PIX</button>
+                        <button class="nav-link" id="v-pills-cartao-tab" data-bs-toggle="pill"
+                            data-bs-target="#v-pills-cartao" type="button" role="tab" aria-controls="v-pills-cartao"
+                            aria-selected="false" style="width: 200px;">Cartão de Crédito</button>
+                    </div>
+                    <div class="tab-content" id="v-pills-tabContent">
+                        <div class="tab-pane fade show active" id="v-pills-pix" role="tabpanel"
+                            aria-labelledby="v-pills-pix-tab">
+
+                            <h2 class="mb-3">PIX</h2>
+
+                            <h5>A melhor opção para suas compras a vista.</h5>
+
+                            <h5>Pague com PIX e aproveite 15% OFF.</h5>
+
+                            <h5>Nessa modalidade, seu pedido é aprovado instantaneamente, o que torna a expedição do seu
+                                pedido ainda mais rápida.</h5>
+
+                        </div>
+                        <div class="tab-pane fade" id="v-pills-cartao" role="tabpanel"
+                            aria-labelledby="v-pills-cartao-tab">
+
+                            <h2 class="mb-5">Cartão de Crédito</h2>
+
+                            <h5 class="mb-5">A vista com até 10% de desconto ou tudo em até 12x sem juros.</h5>
+
+                            <div class="container">
+                                <form class="row g-3">
+                                    <div class="col-md-6">
+                                        <label>Nome impresso no cartão de crédito</label>
+                                        <input type="text" class="form-control">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>Número do Cartão</label>
+                                        <input type="text" class="form-control">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label>Validade</label>
+                                        <input type="text" class="form-control">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label>Código de verificação</label>
+                                        <input type="text" class="form-control">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label>CPF</label>
+                                        <input type="text" class="form-control">
+                                    </div>
+                                    <div class="col-md-12">
+                                        <label for="inputState" class="form-label">Forma de pagamento</label>
+                                        <select id="inputState" class="form-select">
+                                            <option selected>Escolher...</option>
+                                            <option>...</option>
+                                        </select>
+                                    </div>
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+            </div>
+
+        </div>
+    </div>
+</section>
+
+{% endblock %}

@@ -41,17 +41,20 @@
                         {% endfor %}
                     </table>
                     <input type="hidden" name="pedido_id" value="">
-                    <input type="hidden" name="task" value="mod">
+                    <input type="hidden" name="task" value="update">
                 </form>
 
                 <div class="d-flex justify-content-end">
                     <h2 class="">Total R$&nbsp;{{ number2real(total_geral) }}</h2>
                 </div>
 
+                <a type="submit" href="/produtos" class="btn btn-primary btn-block mb-4 mt-4 me-3">Escolher mais
+                    produtos</a>
+                <a type="submit" href="/pagamento" class="btn btn-primary btn-block mb-4 mt-4 me-3">Finalizar
+                    compra</a>
 
             </div>
         </div>
-    </div>
     </div>
 </section>
 

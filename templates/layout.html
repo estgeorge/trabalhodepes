@@ -35,10 +35,17 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarResponsive">
                 <ul class="navbar-nav ms-auto me-4 my-3 my-lg-0">
+                    {% if is_logged_out() and is_logged_out_farm() %}
+                    <li class="nav-item"><a class="nav-link me-lg-3" href="/addusuario">Cadastro de usuário</a></li>
+                    <li class="nav-item"><a class="nav-link me-lg-3" href="/addfarma">Cadastro de farmácia</a></li>
+                    {% endif %}
+                    {% if not is_logged_out() %}
                     <li class="nav-item"><a class="nav-link me-lg-3" href="/produtos">Produtos</a></li>
-                    <li class="nav-item"><a class="nav-link me-lg-3" href="/addusuario">Cadastrar usuário</a></li>
-                    <li class="nav-item"><a class="nav-link me-lg-3" href="/addfarma">Cadastrar farmácia</a></li>
-                    <li class="nav-item"><a class="nav-link me-lg-3" href="#">Área da farmácia</a></li>
+                    {% endif %}
+                    {% if not is_logged_out_farm() %}
+                    <li class="nav-item"><a class="nav-link me-lg-3" href="/farmacia">Gerenciamento de Produtos</a>
+                    </li>
+                    {% endif %}
 
                     {% if carrinho_itens()>0 %}
                     <a class="btn btn-primary rounded-pill px-3 mb-2 mb-lg-0" style="margin-right: 10px;"
@@ -52,7 +59,7 @@
                     </a>
                     {% endif %}
 
-                    {% if is_logged_out() %}
+                    {% if is_logged_out() and is_logged_out_farm() %}
                     <a class="btn btn-primary rounded-pill px-3 mb-2 mb-lg-0" style="margin-right: 10px;" href="/login">
                         <span class="d-flex align-items-center">
                             <span class="small">Entrar</span>

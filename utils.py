@@ -1,3 +1,56 @@
+import sqlite3
+from flask import Flask, render_template, redirect, url_for, flash, request, session
+from werkzeug.exceptions import abort
+
+
+def get_db_connection():
+    conn = sqlite3.connect('database.db')
+    conn.row_factory = sqlite3.Row
+    return conn
+
+
+def get_produto(produto_id):
+    conn = get_db_connection()
+    sql = f'SELECT * FROM estoque WHERE id = {produto_id}'
+    produto = conn.execute(sql).fetchone()
+    conn.close()
+    if produto is None:
+        abort(404)
+    return produto
+
+
+def getFarmacia():
+    conn = get_db_connection()
+    farmacia = conn.execute(
+        "SELECT * FROM farmacia WHERE email='"+session['email_farm']+"'").fetchone()
+    conn.close()
+    return farmacia
+
+
+def getUsuario():
+    conn = get_db_connection()
+    usuario = conn.execute(
+        "SELECT * FROM usuario WHERE email='"+session['email']+"'").fetchone()
+    conn.close()
+    return usuario
+
+
+def carrinho_itens():
+    if 'pedidos' in session:
+        pedidos = session['pedidos']
+        return len(pedidos)
+    else:
+        return 0
+
+
+def is_logged_out():
+    return 'email' not in session
+
+
+def is_logged_out_farm():
+    return 'email_farm' not in session
+
+
 def dumpclean(obj):
     if isinstance(obj, dict):
         for k, v in obj.items():
