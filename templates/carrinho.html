@@ -5,6 +5,14 @@
     function altera(pedido_id) {
         form = document.carrinho;
         form.pedido_id.value = pedido_id;
+        form.task.value = "update"
+        form.submit();
+    }
+
+    function deleta(pedido_id) {
+        form = document.carrinho;
+        form.pedido_id.value = pedido_id;
+        form.task.value = "delete"
         form.submit();
     }
 </script>
@@ -23,12 +31,13 @@
                             <td>Num. de itens</td>
                             <td>Preço unitário</td>
                             <td>Valor</td>
+                            <td>Ações</td>
                             <td></td>
                         </thead>
 
                         {% for pedido in pedidos %}
                         <tr>
-                            <td>{{ pedido['produto'] }}</td>
+                            <td>{{ pedido['produto'] }}<br /><small><i>{{ pedido['token'] }}</i></small></td>
                             <td>
                                 <input type="number" name="nitens{{pedido['pedido_id']}}" class="form-control"
                                     placeholder="" value="{{ pedido['nitens'] }}" style="width: 80px;" />
@@ -37,11 +46,13 @@
                             <td>R$&nbsp;{{ number2real(pedido['total']) }}</td>
                             <td><button type="submit" onclick="altera('{{ pedido['pedido_id'] }}')"
                                     class="btn btn-primary btn-block">Alterar</button></td>
+                            <td><button type="submit" onclick="deleta('{{ pedido['pedido_id'] }}')"
+                                    class="btn btn-primary btn-block">Deletar</button></td>
                         </tr>
                         {% endfor %}
                     </table>
                     <input type="hidden" name="pedido_id" value="">
-                    <input type="hidden" name="task" value="update">
+                    <input type="hidden" name="task" value="">
                 </form>
 
                 <div class="d-flex justify-content-end">

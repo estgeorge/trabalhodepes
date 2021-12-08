@@ -11,8 +11,8 @@
                 <div class="container p-0">
                     <form class="row" method="get">
                         <div class="col-md-8">
-                            <input type="text" name="query" class="form-control" placeholder="Busque aqui seu produto"
-                                value="{{request.args['query']}}"" />
+                            <input type="text" name="search" class="form-control" placeholder="Busque aqui seu produto"
+                                value="{{request.args['search']}}"" />
                         </div>
                         <div class=" col-auto">
                             <button type="submit" class="btn btn-primary btn-block">Enviar</button>
@@ -28,7 +28,7 @@
                     {% for produto in produtos %}
                     <tr>
                         <td>
-                            <a href="produto/{{ produto['id'] }}">{{ produto['produto'] }}</a><br />
+                            <a href="/produto/{{ produto['id'] }}">{{ produto['produto'] }}</a><br />
                             <small>{{ produto['farmacia'] }}</small>
                         </td>
                         <td>

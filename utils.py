@@ -1,4 +1,5 @@
 import sqlite3
+import re
 from flask import Flask, render_template, redirect, url_for, flash, request, session
 from werkzeug.exceptions import abort
 
@@ -82,6 +83,7 @@ def build_pedidos(pedidos):
                                 'produto': pedido['produto'],
                                 'preco': float(pedido['preco']),
                                 'id': int(pedido['id']),
+                                'token': pedido['token'],
                                 'nitens': int(pedido['nitens']),
                                 'total': int(pedido['nitens']) * float(pedido['preco'])
                                 })
@@ -96,12 +98,22 @@ def get_total_pedidos(pedidos):
     return s
 
 
-def add_pedido(pedidos, produto):
+def add_pedido(pedidos, produto, token):
     pedidos.append({'produto': produto['produto'],
                     'preco': produto['preco'],
                     'id': produto['id'],
+                    'token': token,
                     'nitens': 1})
     return build_pedidos(pedidos)
+
+
+def check_prescricao(pedidos, pedido_id):
+    for pedido in pedidos:
+        if (int(pedido['pedido_id']) == int(pedido_id)):
+            if (pedido['token']):
+                return True
+            else:
+                return False
 
 
 def update_pedido(pedidos, pedido_id, nitens):
@@ -110,3 +122,66 @@ def update_pedido(pedidos, pedido_id, nitens):
             pedido['nitens'] = nitens
             break
     return build_pedidos(pedidos)
+
+
+def delete_pedido(pedidos, pedido_id):
+    for pedido in pedidos:
+        if (int(pedido['pedido_id']) == int(pedido_id)):
+            pedido['nitens'] = 0
+            break
+    return build_pedidos(pedidos)
+
+
+def validar_cnpj(cnpj):
+    """
+    Valida CNPJs, retornando apenas a string de números válida.
+
+    # CNPJs errados
+    >>> validar_cnpj('abcdefghijklmn')
+    False
+    >>> validar_cnpj('123')
+    False
+    >>> validar_cnpj('')
+    False
+    >>> validar_cnpj(None)
+    False
+    >>> validar_cnpj('12345678901234')
+    False
+    >>> validar_cnpj('11222333000100')
+    False
+
+    # CNPJs corretos
+    >>> validar_cnpj('11222333000181')
+    '11222333000181'
+    >>> validar_cnpj('11.222.333/0001-81')
+    '11222333000181'
+    >>> validar_cnpj('  11 222 333 0001 81  ')
+    '11222333000181'
+    """
+    cnpj = ''.join(re.findall('\d', str(cnpj)))
+
+    if (not cnpj) or (len(cnpj) < 14):
+        return False
+
+    # Pega apenas os 12 primeiros dígitos do CNPJ e gera os 2 dígitos que faltam
+    inteiros = map(int, cnpj)
+    novo = inteiros[:12]
+
+    prod = [5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2]
+    while len(novo) < 14:
+        r = sum([x*y for (x, y) in zip(novo, prod)]) % 11
+        if r > 1:
+            f = 11 - r
+        else:
+            f = 0
+        novo.append(f)
+        prod.insert(0, 6)
+
+    # Se o número gerado coincidir com o número original, é válido
+    if novo == inteiros:
+        return cnpj
+    return False
+
+
+if __name__ == "__main__":
+    print("OK!")

@@ -10,10 +10,17 @@
                 </div>
             </div>
             <div class="col-md-6">
-                <form action="/carrinho" method="post" name="produto">
+                <form action="/produto/{{ produto['id'] }}" method="post">
                     <h1 class="mt-5">R$ {{ number2real(produto['preco']) }}</h1>
-                    <input type="hidden" name="produto_id" value="{{ produto['id'] }}">
-                    <input type="hidden" name="task" value="add">
+
+                    {% if produto['prescricao'] == 1 %}
+                    <div class="mb-4 form-floating">
+                        <input type="text" name="token" class="form-control" placeholder="Prescrição digital"
+                            value="{{ request.form['token'] or '' }}" />
+                        <label class="form-label">Prescrição digital:</label>
+                    </div>
+                    {% endif %}
+
                     <button type="submit" class="btn btn-primary btn-block mb-4 mt-4 me-3">Comprar</button>
                 </form>
             </div>

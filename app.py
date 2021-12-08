@@ -1,5 +1,6 @@
 import sqlite3
 from flask import Flask, render_template, redirect, url_for, flash, request, session
+from flask_paginate import Pagination
 from werkzeug.exceptions import abort
 from utils import *
 # from flask_paginate import Pagination
@@ -15,11 +16,13 @@ def produtos():
 
     produtos = None
     resultado = ""
-    if request.args.get('query', None):
-        query = request.args['query']
+    if request.args.get('search', None):
+        search = request.args['search'].strip()
         conn = get_db_connection()
-        sql = "SELECT e.*, f.nome AS farmacia FROM estoque AS e INNER JOIN farmacia AS f ON e.farmacia_id = f.id WHERE produto LIKE '%"+query+"%'"
-        produtos = conn.execute(sql).fetchall()
+        query = f"""SELECT e.*, f.nome AS farmacia FROM estoque AS e
+                    INNER JOIN farmacia AS f ON e.farmacia_id = f.id
+                    WHERE produto LIKE '%{search}%'"""
+        produtos = conn.execute(query).fetchall()
         if not produtos:
             resultado = "Nenhum produto encontrado!"
         conn.close()
@@ -27,12 +30,26 @@ def produtos():
     return render_template('produtos.html', produtos=produtos, resultado=resultado)
 
 
-@app.route('/produto/<int:produto_id>')
+@app.route('/produto/<produto_id>', methods=['GET', 'POST'])
 def produto(produto_id):
     if is_logged_out():
         return redirect(url_for('login'))
 
     produto = get_produto(produto_id)
+
+    if request.method == 'POST':
+
+        if ('token' in request.form):
+            token = request.form['token']
+        else:
+            token = ""
+
+        if 'pedidos' in session:
+            session['pedidos'] = add_pedido(session['pedidos'], produto, token)
+        else:
+            session['pedidos'] = add_pedido([], produto, token)
+        return redirect(url_for('carrinho'))
+
     return render_template('produto.html', produto=produto)
 
 
@@ -43,23 +60,22 @@ def carrinho():
 
     if request.method == 'POST':
         task = request.form['task']
-        if (task == "add"):
-            produto_id = int(request.form['produto_id'])
-            produto = get_produto(produto_id)
-            if produto:
-                if 'pedidos' in session:
-                    session['pedidos'] = add_pedido(
-                        session['pedidos'], produto)
-                else:
-                    session['pedidos'] = add_pedido([], produto)
-        elif (task == "update"):
+        if (task == "update"):
             pedido_id = int(request.form['pedido_id'])
             try:
                 nitens = int(request.form[f'nitens{pedido_id}'])
             except ValueError:
                 nitens = 0
-            session['pedidos'] = update_pedido(
-                session['pedidos'], pedido_id, nitens)
+            if check_prescricao(session['pedidos'], pedido_id):
+                flash(
+                    'Não é possível alterar quantidade de produto com prescrição digital!', 'danger')
+            else:
+                session['pedidos'] = update_pedido(
+                    session['pedidos'], pedido_id, nitens)
+        elif (task == "delete"):
+            pedido_id = int(request.form['pedido_id'])
+            session['pedidos'] = delete_pedido(
+                session['pedidos'], pedido_id)
 
     if carrinho_itens() == 0:
         return render_template('produtos.html')
@@ -83,13 +99,24 @@ def farmacia(offset=0):
     if is_logged_out_farm():
         return redirect(url_for('login'))
 
+    page = request.args.get('page', type=int, default=1)
+    per_page = 5
+    offset = (page - 1) * per_page
+
     farmacia = getFarmacia()
     farmacia_id = farmacia['id']
-    query = f"SELECT e.* FROM estoque As e WHERE farmacia_id = {farmacia_id} ORDER BY e.produto LIMIT 10 OFFSET {offset}"
+    query = f"""SELECT e.* FROM estoque As e 
+                WHERE farmacia_id = {farmacia_id} 
+                ORDER BY e.produto LIMIT {per_page} OFFSET {offset}"""
     conn = get_db_connection()
     estoque = conn.execute(query).fetchall()
+    count = conn.execute(f"""SELECT COUNT(*) AS total FROM estoque 
+                         WHERE farmacia_id = {farmacia_id}""").fetchone()
     conn.close()
-    return render_template('farmacia.html', estoque=estoque)
+
+    pagination = Pagination(page=page, per_page=per_page,
+                            total=count['total'], css_framework='bootstrap5')
+    return render_template('farmacia.html', estoque=estoque, pagination=pagination)
 
 
 @app.route('/estoque/add', methods=['GET', 'POST'])
@@ -144,10 +171,22 @@ def estoque_edit(produto_id):
     if (farmacia['id'] != estoque_item['farmacia_id']):
         abort(404)
 
+    if (estoque_item['prescricao']):
+        prescricao_checked = "checked"
+    else:
+        prescricao_checked = ""
+
     if request.method == 'POST':
         produto = request.form['produto'].strip()
         preco = request.form['preco'].strip()
         qtd = int(request.form['qtd'].strip())
+
+        if ('prescricao' in request.form):
+            prescricao_checked = "checked"
+            prescricao = 1
+        else:
+            prescricao_checked = ""
+            prescricao = 0
 
         success = True
         if not produto:
@@ -168,14 +207,14 @@ def estoque_edit(produto_id):
 
         if success:
             conn = get_db_connection()
-            conn.execute('UPDATE estoque SET produto=?, preco=?, qtd=? WHERE id = ?',
-                         (produto, preco, qtd, produto_id))
+            conn.execute('UPDATE estoque SET produto=?, preco=?, qtd=?, prescricao=? WHERE id = ?',
+                         (produto, preco, qtd, prescricao, produto_id))
             conn.commit()
             conn.close()
             flash('Produto atualizado com sucesso!', 'success')
             return redirect(url_for('farmacia'))
 
-    return render_template('estoque_edit.html', estoque_item=estoque_item)
+    return render_template('estoque_edit.html', estoque_item=estoque_item, prescricao_checked=prescricao_checked)
 
 
 @app.route('/estoque/delete/<int:produto_id>', methods=['GET', 'POST'])
