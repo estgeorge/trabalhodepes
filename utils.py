@@ -1,11 +1,12 @@
 import sqlite3
 import re
+import os
 from flask import Flask, render_template, redirect, url_for, flash, request, session
 from werkzeug.exceptions import abort
 
 
 def get_db_connection():
-    conn = sqlite3.connect('database.db')
+    conn = sqlite3.connect(os.path.dirname(__file__)+'/database.db')
     conn.row_factory = sqlite3.Row
     return conn
 
@@ -72,6 +73,10 @@ def dumpclean(obj):
 
 def number2real(n):
     return f'{n:.2f}'.replace('.', ',')
+
+
+def real2number(n):
+    return float(n.replace(',', '.'))
 
 
 def build_pedidos(pedidos):

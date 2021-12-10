@@ -10,35 +10,41 @@
             <div class="col-md-8 p-2">
                 <h2 class="mb-4">Cadastro da Farmácia</h2>
 
+                <p>* Campos obrigatórios</p>
                 <form method="post">
 
                     <div class="mb-4 form-floating">
                         <input type="text" name="nome" class="form-control" placeholder="Nome" value="{{
                             request.form.nome }}" />
-                        <label class="form-label">Nome</label>
+                        <label class="form-label">Nome *</label>
                     </div>
 
                     <div class="mb-4 form-floating">
                         <input type="text" name="endereco" class="form-control" placeholder="Endereço" value="{{
                             request.form.endereco }}" />
-                        <label class="form-label">Endereço</label>
+                        <label class="form-label">Endereço *</label>
                     </div>
 
                     <div class="mb-4 form-floating">
                         <input type="text" name="cnpj" class="form-control" placeholder="CNPJ" value="{{
                             request.form.cnpj }}" />
-                        <label class="form-label">CNPJ</label>
+                        <label class="form-label">CNPJ *</label>
                     </div>
 
                     <div class="mb-4 form-floating">
                         <input type="email" name="email" class="form-control" placeholder="Email" value="{{
                             request.form.email }}" />
-                        <label class="form-label">Email</label>
+                        <label class="form-label">Email *</label>
                     </div>
 
                     <div class="mb-4 form-floating">
                         <input type="password" name="senha" class="form-control" placeholder="Senha" />
-                        <label class="form-label">Senha</label>
+                        <label class="form-label">Senha *</label>
+                    </div>
+
+                    <div class="mb-4 form-floating">
+                        <input type="password" name="senha_conf" class="form-control" placeholder="Senha" />
+                        <label class="form-label">Confirme a senha *</label>
                     </div>
 
                     <button type="submit" class="btn btn-primary btn-block mb-4 mt-4">Enviar</button>

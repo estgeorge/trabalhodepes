@@ -18,7 +18,7 @@
 
                     <div class="mb-4 form-floating">
                         <input type="text" name="preco" class="form-control" placeholder="Preco unitário"
-                            value="{{ request.form['preco'] or estoque_item['preco'] }}" />
+                            value="{{ request.form['preco'] or number2real(estoque_item['preco']) }}" />
                         <label class="form-label">Preço unitário</label>
                     </div>
 
